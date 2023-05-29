@@ -10,7 +10,7 @@ def clearconsole():
     usuario.
     """
   
-    _= input('Presione una tecla para continuar...')
+    _= input('Presione enter para continuar...')
     os.system('cls')
 
 def imprimir_menu():
@@ -346,7 +346,8 @@ def buscar_miembro_salon_fama(lista:list):
    
 
     ingreso = input("Ingrese el nombre del jugador para ver sus logros: ")
-    mensaje_error = "Error, el nombre ingresado no es válido, no se encontró el jugador o no pertenece al Salon de la Fama del Baloncesto."
+    mensaje_error = "Este jugador no pertenece al Salon de la Fama del Baloncesto."
+    error = "Error, el nombre ingresado no es válido, no se encontró el jugador."
     mensaje_exito = "Este jugador pertenece al Salon de la Fama del Baloncesto"
     logro_buscado = "Miembro del Salon de la Fama del Baloncesto"
     validacion = r'^[a-zA-Z]+([A-Za-z]+)*$'
@@ -357,8 +358,11 @@ def buscar_miembro_salon_fama(lista:list):
                     if logro_buscado in jugador["logros"]:
                         informe = ("{0}, {1}".format(jugador["nombre"],mensaje_exito))
                         return informe
+                    else:
+                        informe = ("{0}, {1}".format(jugador["nombre"],mensaje_error))
+                        return informe
                     
-    return mensaje_error
+    return error
 
 def calcular_mayor_estadistica(lista:list,estadistica:str):
     """
