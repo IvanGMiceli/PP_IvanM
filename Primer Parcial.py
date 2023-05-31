@@ -531,5 +531,113 @@ def ordenar_por_posicion_tiros_de_campo(lista:list):
     elif rango_a == 0:
         return ("No hay jugadores que tengan un promedio de porcentaje_tiros_de_campo mayor al valor ingresado")
 
+def ordenar_por_ranking_estadisticas(lista:list,estadistica:str):
+
+    rango_a = len(lista)
+    flag_swap = True
+    indice_ranking = 0
+    dict_jugador = {"nombre" : ""}
+    jugadores_ordenados = []
+
+    if rango_a > 1:
+        while(flag_swap):
+            flag_swap = False
+            rango_a = rango_a - 1
+
+            for indice_A in range(rango_a):
+                if  lista[indice_A]["estadisticas"][estadistica] < lista[indice_A+1]["estadisticas"][estadistica]:
+                    lista[indice_A],lista[indice_A+1] = lista[indice_A+1],lista[indice_A]
+                    flag_swap = True
+
+        for jugador in lista:
+                indice_ranking += 1
+                dict_jugador = {"nombre": jugador["nombre"], "ranking": indice_ranking}
+                jugadores_ordenados.append(dict_jugador)
+
+    return jugadores_ordenados
+
+
+lista_puntos = ordenar_por_ranking_estadisticas(lista_nba,"puntos_totales")
+lista_rebotes = ordenar_por_ranking_estadisticas(lista_nba,"rebotes_totales")
+lista_asistencias = ordenar_por_ranking_estadisticas(lista_nba,"asistencias_totales")
+lista_robos = ordenar_por_ranking_estadisticas(lista_nba,"robos_totales")
+
+
+def crear_ranking_posiciones_csv(lista_posiciones:list):
+
+    lista_columnas = {"jugador" : "","puntos" : "","rebotes" : "","asistencias" : "","robos": ""}
+    nombre_archivo = "informe_jugadores.csv"
+
+    with open(nombre_archivo, "w",newline= "") as file:
+        escritor_csv = csv.writer(file)
+
+        escritor_csv.writerow(lista_columnas.keys())
+
+        """
+        for i in range(len(lista_posiciones)):
+            escritor_csv.writerow(lista_posiciones[i].values())
+        """
+
+        for jugador in lista_posiciones:
+            escritor_csv.writerow(jugador.values())
+
+    if escritor_csv != None:
+        print("Se creó el archivo: archivo.csv")
+        return True
+    else:
+        print("‘Error al crear el archivo: archivo.csv")
+        return False
+ 
+
+#crear_ranking_posiciones_csv(lista_puntos)
+#crear_ranking_posiciones_csv(lista_rebotes)
+#crear_ranking_posiciones_csv(lista_asistencias)
+#crear_ranking_posiciones_csv(lista_robos)
+
+
+# 1 extra
+def contar_jugadores_por_posicion(lista:list):
+    """
+    La función cuenta el número de jugadores por posición en una lista dada de jugadores.
+    
+    :param lista: una lista de diccionarios que representan a los jugadores, donde cada diccionario
+    contiene información sobre un jugador, como su nombre, edad, posición, etc
+    :type lista: list
+    :return: La función `contar_jugadores_por_posicion` devuelve un diccionario que contiene el recuento
+    de jugadores para cada posición en la lista de entrada de jugadores.
+    """
+    
+    contador_de_posiciones = {}
+
+    for jugador in lista:
+        posicion = jugador["posicion"]
+
+        if posicion in contador_de_posiciones:
+            contador_de_posiciones[posicion] += 1
+        else:
+            contador_de_posiciones[posicion] = 1
+
+    return contador_de_posiciones
+
+#print(contar_jugadores_por_posicion(lista_nba))
+
+# 3 extra
+def calcular_mayor_jugador_por_estadistica(lista:list):
+    calcular_mayor_estadistica(lista,"temporadas")
+    calcular_mayor_estadistica(lista,"puntos_totales")
+    calcular_mayor_estadistica(lista,"promedio_puntos_por_partido")
+    calcular_mayor_estadistica(lista,"rebotes_totales")
+    calcular_mayor_estadistica(lista,"promedio_rebotes_por_partido")
+    calcular_mayor_estadistica(lista,"asistencias_totales")
+    calcular_mayor_estadistica(lista,"promedio_asistencias_por_partido")
+    calcular_mayor_estadistica(lista,"robos_totales")
+    calcular_mayor_estadistica(lista,"bloqueos_totales")
+    calcular_mayor_estadistica(lista,"porcentaje_tiros_de_campo")
+    calcular_mayor_estadistica(lista,"porcentaje_tiros_libres")
+    calcular_mayor_estadistica(lista,"porcentaje_tiros_triples")
+
+#calcular_mayor_jugador_por_estadistica(lista_nba)
+
+
 cargar_menu_principal(lista_nba)
 
